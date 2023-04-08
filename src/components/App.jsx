@@ -5,26 +5,26 @@ import Section from './section/section';
 import Notification from './notification/notification';
 
 function App() {
-  const [feedback, setFeedback] = useState({
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  });
+  const [goodFeedback, setGoodFeedback] = useState(0);
+  const [neutralFeedback, setNeutralFeedback] = useState(0);
+  const [badFeedback, setBadFeedback] = useState(0);
 
   const handleFeedback = feedbackType => {
-    setFeedback(prevFeedback => ({
-      ...prevFeedback,
-      [feedbackType]: prevFeedback[feedbackType] + 1,
-    }));
+    if (feedbackType === 'good') {
+      setGoodFeedback(prevGoodFeedback => prevGoodFeedback + 1);
+    } else if (feedbackType === 'neutral') {
+      setNeutralFeedback(prevNeutralFeedback => prevNeutralFeedback + 1);
+    } else if (feedbackType === 'bad') {
+      setBadFeedback(prevBadFeedback => prevBadFeedback + 1);
+    }
   };
 
-  const countTotalFeedback = () =>
-    Object.values(feedback).reduce((total, value) => total + value);
+  const countTotalFeedback = () => goodFeedback + neutralFeedback + badFeedback;
 
   const countPositiveFeedbackPercentage = () => {
     const totalFeedback = countTotalFeedback();
     return totalFeedback > 0
-      ? Math.round((feedback.good / totalFeedback) * 100)
+      ? Math.round((goodFeedback / totalFeedback) * 100)
       : 0;
   };
 
@@ -33,16 +33,16 @@ function App() {
       <Section title="Feedback Option">
         <FeedbackOptions
           onLeaveFeedback={handleFeedback}
-          options={Object.keys(feedback)}
+          options={['good', 'neutral', 'bad']}
         />
       </Section>
 
       {countTotalFeedback() > 0 ? (
         <Section title="Statistics">
           <Statistic
-            good={feedback.good}
-            neutral={feedback.neutral}
-            bad={feedback.bad}
+            good={goodFeedback}
+            neutral={neutralFeedback}
+            bad={badFeedback}
             total={countTotalFeedback()}
             positivePercentage={countPositiveFeedbackPercentage()}
           />

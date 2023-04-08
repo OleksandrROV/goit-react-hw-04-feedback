@@ -1,11 +1,6 @@
-import { useMemo } from 'react';
-
 export const Statistic = ({ good, neutral, bad }) => {
-  const total = useMemo(() => good + neutral + bad, [good, neutral, bad]);
-  const positivePercentage = useMemo(
-    () => Math.round((good / total) * 100),
-    [good, total]
-  );
+  const total = good + neutral + bad;
+  const positivePercentage = Math.round((good / total) * 100) || 0;
 
   return (
     <ul className="stat-list">
